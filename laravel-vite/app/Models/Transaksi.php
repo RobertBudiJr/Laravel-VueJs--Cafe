@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Transaksi extends Model
 {
     use HasFactory;
-    protected $table='users';
-    protected $primaryKey='id_user';
+    protected $table='transaksis';
+    protected $primaryKey='id_transaksi';
     public $timestamps=false;
     /**
      * fillable
@@ -17,6 +17,6 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'nama_user', 'role', 'username', 'password'
+        'tgl_transaksi', 'nama_pelanggan', 'status'
     ];
 }

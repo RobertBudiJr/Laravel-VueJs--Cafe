@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Menu extends Model
 {
     use HasFactory;
-    protected $table='users';
-    protected $primaryKey='id_user';
+    protected $table='menus';
+    protected $primaryKey='id_menu';
     public $timestamps=false;
     /**
      * fillable
@@ -17,6 +17,6 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'nama_user', 'role', 'username', 'password'
+        'nama_menu', 'jenis', 'deskripsi', 'gambar', 'harga'
     ];
 }
