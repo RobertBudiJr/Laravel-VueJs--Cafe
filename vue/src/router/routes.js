@@ -23,8 +23,14 @@ const AdminDashboard = () =>
   import(
     /* webpackChunkName: "admin dashboard" */ "@/pages/Admin/AdminDashboard.vue"
   );
-// const AdminIcons = () =>
-//   import(/* webpackChunkName: "admin icons" */ "@/pages/Admin/AdminIcons.vue");
+const AdminIcons = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Admin/AdminIcons.vue");
+const AdminMenu = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Admin/AdminMenu.vue");
+const AdminUser = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Admin/AdminUser.vue");
+const AdminTable = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Admin/AdminTable.vue");
 
 // Kasir pages import
 
@@ -84,6 +90,26 @@ const routes = [
         path: "admindashboard",
         name: "admin dashboard",
         component: AdminDashboard,
+      },
+      {
+        path: "adminicons",
+        name: "admin icons",
+        component: AdminIcons,
+      },
+      {
+        path: "adminmenu",
+        name: "admin menu",
+        component: AdminMenu,
+      },
+      {
+        path: "adminuser",
+        name: "admin user",
+        component: AdminUser,
+      },
+      {
+        path: "admintable",
+        name: "admin table",
+        component: AdminTable,
       },
     ],
   },
