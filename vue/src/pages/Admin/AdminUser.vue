@@ -1,26 +1,49 @@
 <template>
-  <div>
-    <div class="row">
-      <div class="col-12">
-        <card class="card" :header-classes="{ 'text-right': isRTL }">
-          <h4 slot="header" class="card-title">
-            {{ $t("Manage Users") }}
-          </h4>
-          <div class="table-responsive">
-            <user-list></user-list>
-          </div>
-        </card>
-      </div>
+  <div class="row">
+    <div class="col-12">
+      <card :title="table1.title">
+        <div class="table-responsive">
+          <base-table
+            :data="table1.data"
+            :columns="table1.columns"
+            thead-classes="text-primary"
+          >
+          </base-table>
+        </div>
+      </card>
     </div>
   </div>
 </template>
 <script>
-import UserTable from "../Dashboard/UserTable";
-import UserList from "../UserList";
+import { BaseTable } from "@/components";
+const tableColumns = ["Name", "Role", "Username"];
+const tableData = [
+  {
+    id: 1,
+    name: "Wahyu",
+    role: "Admin",
+    username: "WahyuAdmin123",
+  },
+];
 
 export default {
   components: {
-    UserTable,
+    BaseTable,
+  },
+  data() {
+    return {
+      table1: {
+        title: "Manage User",
+        columns: [...tableColumns],
+        data: [...tableData],
+      },
+      table2: {
+        title: "Table on Plain Background",
+        columns: [...tableColumns],
+        data: [...tableData],
+      },
+    };
   },
 };
 </script>
+<style></style>
