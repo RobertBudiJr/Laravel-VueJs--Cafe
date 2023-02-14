@@ -2,45 +2,24 @@
   <div class="row">
     <div class="col-12">
       <card :title="table1.title">
-        <!-- <div class="table-responsive">
-          <base-table
-            :data="table1.data"
-            :columns="table1.columns"
-            thead-classes="text-primary"
+        <div class="row">
+          <card
+            v-for="index in table2.data"
+            v-bind:key="index.id"
+            class="col-3"
+            :imageTop="index.gambar"
+            :title="index.nama_menu"
+            :subTitle="index.jenis"
+            :subTitle2="index.harga"
           >
-          </base-table>
-        </div> -->
-        <!-- <card>
-          <img :src="table1.columns.gambar" alt="" class="card-img-top" />
-          <h4 class="card-title">{{ table1.columns.nama_menu }}</h4>
-          <div class="row">
-            <h5 class="card-subtitle mb-2 text-muted col-6">
-              {{ table1.columns.jenis }}
-            </h5>
-            <h5 class="card-subtitle mb-2 text-right col-6">
-              Rp. {{ table1.columns.harga }},00
-            </h5>
-          </div>
-          <p class="card-text">{{ table1.columns.deskripsi }}</p>
-        </card> -->
-        <card
-          v-for="id in table2.data"
-          v-bind:key="id"
-          class="col-3"
-          :title="table2.data.nama_menu"
-          :subTitle="table2.data.jenis"
-          :subTitle2="table2.data.harga"
-        >
-          <img :src="table2.data.gambar" alt="" class="card-img-top mb-3" />
-          <div class="card-text">{{ table2.data.deskripsi }}</div>
-        </card>
+            <div class="card-text">{{ index.deskripsi }}</div>
+          </card>
+        </div>
       </card>
     </div>
   </div>
 </template>
 <script>
-// import { BaseTable } from "@/components";
-// import { Card } from "@/components/Cards";
 const tableData = [
   {
     id: 1,
@@ -63,10 +42,7 @@ const tableData = [
 ];
 
 export default {
-  components: {
-    // BaseTable,
-    // Card,
-  },
+  components: {},
   data() {
     return {
       table1: {
@@ -78,6 +54,5 @@ export default {
     };
   },
 };
-// console.log();
 </script>
 <style></style>

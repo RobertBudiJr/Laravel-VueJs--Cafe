@@ -9,17 +9,17 @@
         />
         <sidebar-link
           to="/admin/adminmenu"
-          :name="$t('sidebar.menu')"
+          :name="$t('menu')"
           icon="tim-icons icon-bullet-list-67"
         />
         <sidebar-link
           to="/admin/adminuser"
-          :name="$t('sidebar.user')"
+          :name="$t('user')"
           icon="tim-icons icon-single-02"
         />
         <sidebar-link
           to="/admin/admintable"
-          :name="$t('sidebar.table')"
+          :name="$t('table')"
           icon="tim-icons icon-calendar-60"
         />
         <sidebar-link

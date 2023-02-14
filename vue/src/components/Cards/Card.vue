@@ -1,9 +1,7 @@
 <template>
   <div class="card" :class="[type && `card-${type}`]">
     <div class="card-img-top" v-if="$slots.image">
-      <slot name="image">
-        <img :src="image" />
-      </slot>
+      <slot name="image"> </slot>
     </div>
     <div
       class="card-header"
@@ -11,6 +9,7 @@
       :class="headerClasses"
     >
       <slot name="header">
+        <img v-if="imageTop" :src="imageTop" alt="" class="card-img-top mb-3" />
         <h4 class="card-title">{{ title }}</h4>
         <div class="row">
           <p class="card-category col-6" v-if="subTitle">{{ subTitle }}</p>
@@ -31,7 +30,10 @@
     </div>
     <slot name="raw-content"></slot>
     <div class="card-footer" :class="footerClasses" v-if="$slots.footer">
-      <slot name="footer"></slot>
+      <slot name="footer">
+        <a href="#" v-if="btnEdit" class="btn" :clsass="btnEdit">Edit</a>
+        <a href="#" v-if="btnDelete" class="btn" :class="btnDelete">Delete</a>
+      </slot>
     </div>
   </div>
 </template>
@@ -39,6 +41,10 @@
 export default {
   name: "card",
   props: {
+    imageTop: {
+      type: String,
+      description: "Card image top",
+    },
     title: {
       type: String,
       description: "Card title",
@@ -66,6 +72,14 @@ export default {
     footerClasses: {
       type: [String, Object, Array],
       description: "Card footer css classes",
+    },
+    btnEdit: {
+      type: [String, Object, Array],
+      description: "Card button edit",
+    },
+    btnDelete: {
+      type: [String, Object, Array],
+      description: "Card button danger",
     },
   },
 };
