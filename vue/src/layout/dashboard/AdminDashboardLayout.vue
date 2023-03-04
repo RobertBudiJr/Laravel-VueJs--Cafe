@@ -23,7 +23,7 @@
           icon="tim-icons icon-calendar-60"
         />
         <sidebar-link
-          to="/adminicons"
+          to="/admin/adminicons"
           :name="$t('sidebar.icons')"
           icon="tim-icons icon-atom"
         />
