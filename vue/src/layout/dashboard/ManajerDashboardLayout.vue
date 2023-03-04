@@ -8,7 +8,7 @@
           icon="tim-icons icon-chart-pie-36"
         />
         <sidebar-link
-          to="/manajericons"
+          to="/manajer/manajericons"
           :name="$t('sidebar.icons')"
           icon="tim-icons icon-atom"
         />

@@ -1,4 +1,4 @@
-import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
+// import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import AdminDashboardLayout from "@/layout/dashboard/AdminDashboardLayout.vue";
 import ManajerDashboardLayout from "@/layout/dashboard/ManajerDashboardLayout.vue";
 
@@ -6,19 +6,19 @@ import ManajerDashboardLayout from "@/layout/dashboard/ManajerDashboardLayout.vu
 import NotFound from "@/pages/NotFoundPage.vue";
 
 // Default pages import
-const Dashboard = () =>
-  import(/* webpackChunkName: "dashboard" */ "@/pages/Dashboard.vue");
-const Profile = () =>
-  import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
-const Notifications = () =>
-  import(/* webpackChunkName: "common" */ "@/pages/Notifications.vue");
-const Icons = () =>
-  import(/* webpackChunkName: "common" */ "@/pages/Icons.vue");
-const Maps = () => import(/* webpackChunkName: "common" */ "@/pages/Maps.vue");
-const Typography = () =>
-  import(/* webpackChunkName: "common" */ "@/pages/Typography.vue");
-const TableList = () =>
-  import(/* webpackChunkName: "common" */ "@/pages/TableList.vue");
+// const Dashboard = () =>
+//   import(/* webpackChunkName: "dashboard" */ "@/pages/Dashboard.vue");
+// const Profile = () =>
+//   import(/* webpackChunkName: "common" */ "@/pages/Profile.vue");
+// const Notifications = () =>
+//   import(/* webpackChunkName: "common" */ "@/pages/Notifications.vue");
+// const Icons = () =>
+//   import(/* webpackChunkName: "common" */ "@/pages/Icons.vue");
+// const Maps = () => import(/* webpackChunkName: "common" */ "@/pages/Maps.vue");
+// const Typography = () =>
+//   import(/* webpackChunkName: "common" */ "@/pages/Typography.vue");
+// const TableList = () =>
+//   import(/* webpackChunkName: "common" */ "@/pages/TableList.vue");
 
 // Admin pages import
 const AdminDashboard = () =>
@@ -37,57 +37,57 @@ const AdminTable = () =>
 // Kasir pages import
 
 // Manajer pages import
-// const ManajerDashboard = () =>
-//   import(
-//     /* webpackChunkName: "manajer dashboard" */ "@/pages/Manajer/ManajerDashboard.vue"
-//   );
-// const ManajerIcons = () =>
-//   import(/* webpackChunkName: "common" */ "@/pages/Manajer/ManajerIcons.vue");
+const ManajerDashboard = () =>
+  import(
+    /* webpackChunkName: "manajer dashboard" */ "@/pages/Manajer/ManajerDashboard.vue"
+  );
+const ManajerIcons = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Manajer/ManajerIcons.vue");
 
 const routes = [
   // Default pages
-  {
-    path: "/",
-    component: DashboardLayout,
-    redirect: "dashboard",
-    children: [
-      {
-        path: "dashboard",
-        name: "dashboard",
-        component: Dashboard,
-      },
-      {
-        path: "profile",
-        name: "profile",
-        component: Profile,
-      },
-      {
-        path: "notifications",
-        name: "notifications",
-        component: Notifications,
-      },
-      {
-        path: "icons",
-        name: "icons",
-        component: Icons,
-      },
-      {
-        path: "maps",
-        name: "maps",
-        component: Maps,
-      },
-      {
-        path: "typography",
-        name: "typography",
-        component: Typography,
-      },
-      {
-        path: "table-list",
-        name: "table-list",
-        component: TableList,
-      },
-    ],
-  },
+  // {
+  //   path: "/",
+  //   component: DashboardLayout,
+  //   redirect: "dashboard",
+  //   children: [
+  //     {
+  //       path: "dashboard",
+  //       name: "dashboard",
+  //       component: Dashboard,
+  //     },
+  //     {
+  //       path: "profile",
+  //       name: "profile",
+  //       component: Profile,
+  //     },
+  //     {
+  //       path: "notifications",
+  //       name: "notifications",
+  //       component: Notifications,
+  //     },
+  //     {
+  //       path: "icons",
+  //       name: "icons",
+  //       component: Icons,
+  //     },
+  //     {
+  //       path: "maps",
+  //       name: "maps",
+  //       component: Maps,
+  //     },
+  //     {
+  //       path: "typography",
+  //       name: "typography",
+  //       component: Typography,
+  //     },
+  //     {
+  //       path: "table-list",
+  //       name: "table-list",
+  //       component: TableList,
+  //     },
+  //   ],
+  // },
   // Admin Pages
   {
     path: "/admin",
@@ -121,24 +121,24 @@ const routes = [
       },
     ],
   },
-  // // Manajer Pages
-  // {
-  //   path: "/manajer",
-  //   component: ManajerDashboardLayout,
-  //   redirect: "manajerdashboard",
-  //   children: [
-  //     {
-  //       path: "manajerdashboard",
-  //       name: "manajer dashboard",
-  //       component: ManajerDashboard,
-  //     },
-  //     {
-  //       path: "manajericons",
-  //       name: "manajer icons",
-  //       component: ManajerIcons,
-  //     },
-  //   ],
-  // },
+  // Manajer Pages
+  {
+    path: "/manajer",
+    component: ManajerDashboardLayout,
+    redirect: "manajerdashboard",
+    children: [
+      {
+        path: "manajerdashboard",
+        name: "manajer dashboard",
+        component: ManajerDashboard,
+      },
+      {
+        path: "manajericons",
+        name: "manajer icons",
+        component: ManajerIcons,
+      },
+    ],
+  },
   { path: "*", component: NotFound },
 ];
 
