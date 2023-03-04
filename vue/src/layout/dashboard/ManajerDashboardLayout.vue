@@ -3,27 +3,12 @@
     <side-bar>
       <template slot="links">
         <sidebar-link
-          to="/admin/admindashboard"
+          to="/manajer/manajerdashboard"
           :name="$t('sidebar.dashboard')"
           icon="tim-icons icon-chart-pie-36"
         />
         <sidebar-link
-          to="/admin/adminmenu"
-          :name="$t('menu')"
-          icon="tim-icons icon-bullet-list-67"
-        />
-        <sidebar-link
-          to="/admin/adminuser"
-          :name="$t('user')"
-          icon="tim-icons icon-single-02"
-        />
-        <sidebar-link
-          to="/admin/admintable"
-          :name="$t('table')"
-          icon="tim-icons icon-calendar-60"
-        />
-        <sidebar-link
-          to="/adminicons"
+          to="/manajericons"
           :name="$t('sidebar.icons')"
           icon="tim-icons icon-atom"
         />

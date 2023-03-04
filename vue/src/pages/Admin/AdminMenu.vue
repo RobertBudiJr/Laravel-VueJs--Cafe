@@ -11,6 +11,7 @@
             :title="index.nama_menu"
             :subTitle="index.jenis"
             :subTitle2="index.harga"
+            :btnId="index.id"
           >
             <div class="card-text">{{ index.deskripsi }}</div>
           </card>

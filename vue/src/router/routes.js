@@ -1,5 +1,7 @@
 import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import AdminDashboardLayout from "@/layout/dashboard/AdminDashboardLayout.vue";
+import ManajerDashboardLayout from "@/layout/dashboard/ManajerDashboardLayout.vue";
+
 // GeneralViews
 import NotFound from "@/pages/NotFoundPage.vue";
 
@@ -35,6 +37,12 @@ const AdminTable = () =>
 // Kasir pages import
 
 // Manajer pages import
+const ManajerDashboard = () =>
+  import(
+    /* webpackChunkName: "manajer dashboard" */ "@/pages/Manajer/ManajerDashboard.vue"
+  );
+const ManajerIcons = () =>
+  import(/* webpackChunkName: "common" */ "@/pages/Manajer/ManajerIcons.vue");
 
 const routes = [
   // Default pages
@@ -110,6 +118,29 @@ const routes = [
         path: "admintable",
         name: "admin table",
         component: AdminTable,
+      },
+      {
+        path: "adminicons",
+        name: "admin icons",
+        component: AdminIcons,
+      },
+    ],
+  },
+  // Manajer Pages
+  {
+    path: "/manajer",
+    component: ManajerDashboardLayout,
+    redirect: "manajerdashboard",
+    children: [
+      {
+        path: "manajerdashboard",
+        name: "manajer dashboard",
+        component: ManajerDashboard,
+      },
+      {
+        path: "manajericons",
+        name: "manajer icons",
+        component: ManajerIcons,
       },
     ],
   },

@@ -25,14 +25,19 @@
     <div class="card-body" v-if="$slots.default">
       <slot></slot>
     </div>
-    <div class="card-image" v-if="$slots['image-bottom']">
-      <slot name="image-bottom"></slot>
-    </div>
     <slot name="raw-content"></slot>
-    <div class="card-footer" :class="footerClasses" v-if="$slots.footer">
+    <div
+      class="card-footer d-flex flex-row"
+      :class="footerClasses"
+      v-if="btnId"
+    >
       <slot name="footer">
-        <a href="#" v-if="btnEdit" class="btn" :clsass="btnEdit">Edit</a>
-        <a href="#" v-if="btnDelete" class="btn" :class="btnDelete">Delete</a>
+        <a :href="`${btnId}`" class="btn btn-edit" v-if="btnId"
+          ><i class="tim-icons icon-pencil"></i
+        ></a>
+        <a :href="`${btnId}`" class="btn btn-danger" v-if="btnId"
+          ><i class="tim-icons icon-trash-simple"></i
+        ></a>
       </slot>
     </div>
   </div>
@@ -73,13 +78,8 @@ export default {
       type: [String, Object, Array],
       description: "Card footer css classes",
     },
-    btnEdit: {
-      type: [String, Object, Array],
-      description: "Card button edit",
-    },
-    btnDelete: {
-      type: [String, Object, Array],
-      description: "Card button danger",
+    btnId: {
+      type: String,
     },
   },
 };
