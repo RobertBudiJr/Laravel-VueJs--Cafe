@@ -45,7 +45,7 @@ Route::group(['middleware' => ['jwt.verify']], function(){
         Route::get('/transaksi/{id}', [TransaksiController::class, 'show']);
     
         Route::post('/transaksi', [TransaksiController::class, 'create']);
-        Route::put('/transaksis/{id}', [TransaksiController::class, 'update']);
+        Route::put('/updatetransaksi/{id}', [TransaksiController::class, 'update']);
     });
 
     Route::group(['middleware' => ['api.admin']], function(){

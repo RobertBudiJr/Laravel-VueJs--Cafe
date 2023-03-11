@@ -53,6 +53,26 @@ class TransaksiController extends Controller
             return response()->json($validator->errors(),400);
         }
 
+        $meja_check = Meja::where('id_meja', $request->id_meja)->first();
+        // Check meja available
+        if (!$meja_check) return response()->json([
+            'message' => 'Meja tidak tersedia'
+        ]);
+        // Check meja occupied
+        $meja_status = Meja::find($request->id_meja);
+        $meja_status = $meja_status->status_meja;
+
+        if ($meja_status == 'terisi') return response()->json([
+            'message' => 'Meja penuh'
+        ]);
+
+        // Check user available
+        $user_check = User::where('id_user', $request->id_user)->first();
+        if (!$user_check) return response()->json([
+            'success' => false,
+            'message' => 'User tidak tersedia'
+        ]);
+
         // Query to Transaksis table
         $transaksi_input = Transaksi::create([
             // 'tgl_transaksi' => $request->get('tgl_transaksi'),
@@ -69,7 +89,6 @@ class TransaksiController extends Controller
 
         // Query to Detail Transaksi table
         $detail_input = DetailTransaksi::create([
-            // Kode di bawah tidak work, pinginku valuene id transaksi
             'id_transaksi' => $id,
             'id_menu' => $request->get('id_menu'),
             'jumlah' => $request->get('jumlah'),
@@ -106,30 +125,49 @@ class TransaksiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Transaksi  $transaksi
+     * @param  \App\Models\Meja  $meja
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Transaksi $id_transaksi)
     {
-        // Update hanya dapat dilakukan untuk mengubah status belum bayar menjadi lunas
-        // Melakukan validasi input user pada bagian status
-        $validateData = $request->validate([
-            'status' => 'required|in:belum_bayar,lunas'
+        $validator = Validator::make($request->all(),[
+            'status' => 'required|in:belum_bayar,lunas',
         ]);
 
-        // Melakukan update record status
-        $id_transaksi->status = $validateData['status'];
-        $id_transaksi->save();
+        if ($validator->fails()){
+            return response()->json($validator->errors(),400);
+        }
 
-        // melakukan pengecekan jika status lunas maka meja kembali avaible untuk di pesan kembali
-        if ($id_transaksi->status == "lunas") {
-            $meja = Meja::where('id_meja', $id_transaksi->id_meja)->first();
-            $meja->status = true;
-            $meja->save();
+        $update_transaksi = Transaksi::where('id_transaksi', $id_transaksi);
+        // Find meja
+        // $select_transaksi = Transaksi::find($id_transaksi)->first();
+        $select_meja = $update_transaksi->id_meja;
+        $find_meja = Meja::find($select_meja);
+        $status_meja = $find_meja->status_meja;
+
+        if ($update_transaksi) {
+            $update_transaksi->update([
+                'status' => $request->status,
+            ]);
+            if ($request->status == 'lunas') {
+                $status_meja->update([
+                    'status_meja' => 'kosong'
+                ]);
+            } else {
+                $status_meja->update([
+                    'status_meja' => 'terisi'
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'success update meja'
+                'message' => 'status transaksi updated',
+                'data' => $update_transaksi
             ]);
         }
+        return response()->json([
+            'success' => false,
+            'message' => 'failed to update transaksi'
+        ]);
     }
 }
