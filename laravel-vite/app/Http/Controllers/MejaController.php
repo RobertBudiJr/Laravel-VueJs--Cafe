@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Meja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use App\Policies\OrdersDetailPolicy;
+use Dflydev\DotAccessData\Data;
 
 class MejaController extends Controller
 {
@@ -114,4 +118,21 @@ class MejaController extends Controller
             'message' => 'failed to delete meja'
         ],200);
     }
+
+    // filter data which occupied or not
+    public function mejafilter(Request $request) {
+        $status_meja = $request->status_meja;
+
+        $results= [];
+
+        $results = DB::table('mejas')
+        ->select('id_meja','nomor_meja', 'status_meja')
+        ->where("status_meja", "$status_meja")
+        ->get();
+
+        return response()->json(([
+            'data' => $results
+        ]));
+    } 
 }
+

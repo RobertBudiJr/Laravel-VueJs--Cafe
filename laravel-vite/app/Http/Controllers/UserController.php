@@ -35,6 +35,7 @@ class UserController extends Controller
 
         // return response()->json(compact('token'));
         return  $this->createNewToken($token);
+        
     }
 
     public function userProfile(){
@@ -58,7 +59,7 @@ class UserController extends Controller
             'role' => 'required',
             'username' => 'required|string|max:255',
             'email' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -104,36 +105,91 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request,$id){
+    // public function update(Request $request,$id){
         
-        $request->validate([
+    //     $request->validate([
+    //         'nama_user' => 'required|string|max:255',
+    //         'role' => 'required',
+    //         'username' => 'required|string|max:255',
+    //         'email' => 'required|string|max:255',
+    //         'password' => 'required',
+    //     ]);
+
+       
+
+    //     User::where('id', $id)->update([
+    //         'nama_user' => $request->nama_user,
+    //         'role' => $request->role,
+    //         'username' => $request->username,
+    //         'email' => $request->email,
+    //         'password' =>Hash::make( $request->password),
+    //     ]);
+
+    //     $data = User::find($id);
+
+    //     return response([
+    //         "data" => $data
+    //     ]);
+    // }
+
+    // public function delete($id){
+    //     User::where('id',$id)->delete();
+
+    //     return response(["Data telah terhapus"]);
+    // }
+    //update data
+    public function update(Request $request, $id_user)
+    {
+        $validator = Validator::make($request->all(), [
             'nama_user' => 'required|string|max:255',
             'role' => 'required',
             'username' => 'required|string|max:255',
             'email' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required',
         ]);
 
-       
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-        User::where('id', $id)->update([
-            'nama_user' => $request->nama_user,
-            'role' => $request->role,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' =>Hash::make( $request->password),
-        ]);
+        $update_user = User::where('id_user', $id_user);
 
-        $data = User::find($id);
-
-        return response([
-            "data" => $data
+        if ($update_user) {
+            $update_user->update([
+                'nama_user' => $request->nama_user,
+                'role' => $request->role,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' =>Hash::make( $request->password),
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'user updated',
+                'data' => $update_user
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'failed to update user'
         ]);
     }
+    
+    //delete data
+    public function destroy($id_user){
+        $user_delete = User::findOrfail($id_user);
 
-    public function delete($id){
-        User::where('id',$id)->delete();
+        if($user_delete){
+            $user_delete->delete();
 
-        return response(["Data telah terhapus"]);
+            return response()->json([
+                'success' => true,
+                'message' => 'user deleted',
+                'data' => $user_delete
+            ],200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'failed to delete user'
+        ],200);
     }
 }
