@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('nama_user', 100);
             $table->enum('role', ['admin', 'kasir', 'manajer']);
             $table->string('username', 100);
+            $table->string('email', 100);
             $table->text('password');
+            $table->timestamp('email_verified_at')->nullable();
         });
     }
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -14,10 +16,16 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('username', 'password');
+        // I changed variable definition from $request->only('email', 'password') to $request->only('username', 'password')
+        $credentials = $request->only('email', 'password');
+
+        // variable below have the same results
+        // $credentials = ['username' => $request->input('username'), 'password' => $request->input('password')];
+
 
         try {
             if(! $token = JWTAuth::attempt($credentials)) {
+                // Keep getting this error
                 return response()->json(['error' => 'invalid credentials'], 400);
             }
         }
@@ -49,6 +57,7 @@ class UserController extends Controller
             'nama_user' => 'required|string|max:255',
             'role' => 'required',
             'username' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
         if($validator->fails()){
@@ -58,13 +67,14 @@ class UserController extends Controller
             'nama_user' => $request->get('nama_user'),
             'role' => $request->get('role'),
             'username' => $request->get('username'),
+            'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
         ]);
 
         $token = JWTAuth::fromUser($user);
         return response()->json(compact('user','token'),201);
     }
-    
+
     public function getAuthenticatedUser()
     {
         try {
@@ -100,6 +110,7 @@ class UserController extends Controller
             'nama_user' => 'required|string|max:255',
             'role' => 'required',
             'username' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -107,8 +118,9 @@ class UserController extends Controller
 
         User::where('id', $id)->update([
             'nama_user' => $request->nama_user,
-            'username' => $request->username,
             'role' => $request->role,
+            'username' => $request->username,
+            'email' => $request->email,
             'password' =>Hash::make( $request->password),
         ]);
 
