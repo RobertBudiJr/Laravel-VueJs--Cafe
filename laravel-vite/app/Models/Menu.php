@@ -19,4 +19,9 @@ class Menu extends Model
     protected $fillable = [
         'nama_menu', 'jenis', 'deskripsi', 'gambar', 'harga'
     ];
+
+    public function detail_transaksi()
+    {
+        return $this->hasMany(Menu::class);
+    }
 }

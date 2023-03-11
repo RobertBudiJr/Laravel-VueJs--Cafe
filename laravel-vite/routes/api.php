@@ -37,17 +37,17 @@ Route::group(['middleware' => ['jwt.verify']], function(){
         // CRUD Menu
         Route::resource('/menu', MenuController::class);
         // CRUD Meja
-        Route::post('/meja', [MejaController::class,'store']);
-        Route::get('/meja', [MejaController::class, 'index']);
-        Route::get('/meja/{id}', [MejaController::class, 'show']);
-        Route::delete('/meja/{id}', [MejaController::class,'destroy']);
+        Route::resource('/meja', MejaController::class);
         // Filter meja
         Route::post('/mejafilter', [MejaController::class, 'mejafilter']);
-        // CRUD Transaksi
-        Route::resource('/transaksi', TransaksiController::class);
-        // CRUD Detail Transaksi
-        Route::resource('/detail_transaksi', DetailTransaksiController::class);
+        // Transaksi
+        Route::get('/transaksi', [TransaksiController::class, 'index']);
+        Route::get('/transaksi/{id}', [TransaksiController::class, 'show']);
+    
+        Route::post('/transaksi', [TransaksiController::class, 'create']);
+        Route::put('/transaksis/{id}', [TransaksiController::class, 'update']);
     });
+
     Route::group(['middleware' => ['api.admin']], function(){
         // CRUD user
         Route::post('/register', [UserController::class, 'register']);

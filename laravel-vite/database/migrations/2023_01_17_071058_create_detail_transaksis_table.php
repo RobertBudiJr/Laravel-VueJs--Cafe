@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id_detail_transaksi', 11);
             $table->bigInteger('id_transaksi')->unsigned();
             $table->bigInteger('id_menu')->unsigned();
+            $table->bigInteger('jumlah');
             $table->bigInteger('total_harga');
 
             $table->foreign('id_transaksi')->references('id_transaksi')->on('transaksis')

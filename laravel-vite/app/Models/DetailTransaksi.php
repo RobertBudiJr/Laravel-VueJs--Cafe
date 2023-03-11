@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Detail_transaksi extends Model
+class DetailTransaksi extends Model
 {
     use HasFactory;
     protected $table='detail_transaksis';
@@ -17,6 +17,16 @@ class Detail_transaksi extends Model
      * @var array
      */
     protected $fillable = [
-        'total_harga'
+        'id_transaksi', 'id_menu', 'jumlah', 'total_harga'
     ];
+
+    // public function transaksi()
+    // {
+    //     return $this->belongsTo(Transaksi::class);
+    // }
+
+    // public function menu()
+    // {
+    //     return $this->belongsTo(Menu::class);
+    // }
 }

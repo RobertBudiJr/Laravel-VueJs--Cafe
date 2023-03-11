@@ -19,4 +19,9 @@ class Meja extends Model
     protected $fillable = [
         'nomor_meja', 'status_meja'
     ];
+
+    public function detail_transaksi()
+    {
+        return $this->hasMany(DetailTransaksi::class);
+    }
 }
