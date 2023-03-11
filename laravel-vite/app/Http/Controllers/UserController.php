@@ -5,124 +5,123 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
 
 class UserController extends Controller
 {
-    // /**
-    //  * Create a new controller instance.
-    //  *
-    //  * @return void
-    //  */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-    
-    //get data
-    public function index(){
-        $user = User::get();
-        return response()->json($user);
-    }
+    public function login(Request $request)
+    {
+        $credentials = $request->only('username', 'password');
 
-    //show data
-    public function show($id_user){
-        $user_dt = User::findOrFail($id_user);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'user list',
-            'data' => $user_dt
-        ]);
-    }
-
-    //input data
-    public function store(Request $request){
-        $validator = Validator::make($request->all(),[
-            'nama_user' => 'required',
-            'role' => 'required',
-            'username' => 'required',
-            'password' => 'required'
-
-        ]);
-
-        if ($validator->fails()){
-            return response()->json($validator->errors(),400);
+        try {
+            if(! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid credentials'], 400);
+            }
+        }
+        catch (JWTException $e) {
+            return response()->json(['error' => 'could not create token'], 500);
         }
 
-        $user_input = User::create([
+        // return response()->json(compact('token'));
+        return  $this->createNewToken($token);
+    }
+
+    public function userProfile(){
+        return response()->json(auth()->user());
+    }
+
+    protected function createNewToken($token){
+        // dd(auth()->user()->role);
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => config('jwt.ttl'),
+            'user' => auth()->user()
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_user' => 'required|string|max:255',
+            'role' => 'required',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+        $user = User::create([
             'nama_user' => $request->get('nama_user'),
             'role' => $request->get('role'),
             'username' => $request->get('username'),
-            'password' => $request->get('password')
-
+            'password' => Hash::make($request->get('password')),
         ]);
 
-        if ($user_input){
-            return response()->json([
-                'success' => true,
-                'message' => 'user created',
-                'data' => $user_input
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'failed to create user'
-        ]);
-    }
-
-    //update data
-    public function update(Request $request, $id_user)
-    {
-        $validator = Validator::make($request->all(), [
-            'nama_user' => 'required',
-            'role' => 'required',
-            'username' => 'required',
-            'password' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $update_user = User::where('id_user', $id_user);
-
-        if ($update_user) {
-            $update_user->update([
-                'nama_user' => $request->nama_user,
-                'role' => $request->role,
-                'username' => $request->username,
-                'password' => $request->password
- 
-            ]);
-            return response()->json([
-                'success' => true,
-                'message' => 'user updated',
-                'data' => $update_user
-            ]);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => 'failed to update user'
-        ]);
+        $token = JWTAuth::fromUser($user);
+        return response()->json(compact('user','token'),201);
     }
     
-    //delete data
-    public function destroy($id_user){
-        $user_delete = User::findOrfail($id_user);
-
-        if($user_delete){
-            $user_delete->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'user deleted',
-                'data' => $user_delete
-            ],200);
+    public function getAuthenticatedUser()
+    {
+        try {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } 
+        catch (TokenExpiredException $e)
+        {
+            return response()->json(['token_expired'], 401);
         }
+        catch (TokenInvalidException $e)
+        {
+            return response()->json(['token_invalid'], 401);
+        }
+        catch (JWTException $e)
+        {
+            return response()->json(['token_absent'], 400);
+        }
+
+        return response()->json(compact('user'));
+    }
+    
+    public function show(){
         return response()->json([
-            'success' => false,
-            'message' => 'failed to delete user'
-        ],200);
+            'data' => User::all()
+        ]);
+    }
+
+    public function update(Request $request,$id){
+        
+        $request->validate([
+            'nama_user' => 'required|string|max:255',
+            'role' => 'required',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+       
+
+        User::where('id', $id)->update([
+            'nama_user' => $request->nama_user,
+            'username' => $request->username,
+            'role' => $request->role,
+            'password' =>Hash::make( $request->password),
+        ]);
+
+        $data = User::find($id);
+
+        return response([
+            "data" => $data
+        ]);
+    }
+
+    public function delete($id){
+        User::where('id',$id)->delete();
+
+        return response(["Data telah terhapus"]);
     }
 }

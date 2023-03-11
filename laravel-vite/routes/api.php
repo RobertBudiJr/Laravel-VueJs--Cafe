@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use function PHPSTORM_META\type;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
@@ -22,9 +24,34 @@ use App\Http\Controllers\DetailTransaksiController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('/user', UserController::class);
-Route::resource('/meja', MejaController::class);
-Route::resource('/menu', MenuController::class);
-Route::resource('/transaksi', TransaksiController::class);
-Route::resource('/detail_transaksi', DetailTransaksiController::class);
+
+Route::group(['middleware' => ['jwt.verify']], function(){
+    Route::group(['middleware' => ['api.manajer']], function(){
+        // CRUD Transaksi
+        Route::resource('/transaksi', TransaksiController::class);
+        // CRUD Detail Transaksi
+        Route::resource('/detail_transaksi', DetailTransaksiController::class);
+    });
+
+    Route::group(['middleware' => ['api.kasir']], function(){
+        // CRUD Menu
+        Route::resource('/menu', MenuController::class);
+        // CRUD Meja
+        Route::resource('/meja', MenuController::class);
+        // CRUD Transaksi
+        Route::resource('/transaksi', TransaksiController::class);
+        // CRUD Detail Transaksi
+        Route::resource('/detail_transaksi', DetailTransaksiController::class);
+    });
+    Route::group(['middleware' => ['api.admin']], function(){
+        // CRUD user
+        Route::post('/register', [UserController::class, 'register']);
+        Route::put('/user/{id}', [UserController::class, 'update']);
+        Route::delete('/user/{id}', [UserController::class, 'delete']);
+        Route::get('/user', [UserController::class, 'show']);
+    });
+    
+});
+
+Route::post('/login', [UserController::class, 'login']);
 
