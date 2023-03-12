@@ -28,6 +28,16 @@ class TransaksiController extends Controller
         return response()->json($transaksi);
     }
 
+    public function show($id_transaksi){
+        $transaksi_dt = Transaksi::findOrFail($id_transaksi);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'transaksi list',
+            'data' => $transaksi_dt
+        ]);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -128,10 +138,11 @@ class TransaksiController extends Controller
      * @param  \App\Models\Meja  $meja
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaksi $id_transaksi)
+    public function update(Request $request, $id_transaksi)
     {
         $validator = Validator::make($request->all(),[
             'status' => 'required|in:belum_bayar,lunas',
+            // 'status_meja' => 'in:kosong,terisi',
         ]);
 
         if ($validator->fails()){
@@ -139,25 +150,30 @@ class TransaksiController extends Controller
         }
 
         $update_transaksi = Transaksi::where('id_transaksi', $id_transaksi);
-        // Find meja
-        // $select_transaksi = Transaksi::find($id_transaksi)->first();
-        $select_meja = $update_transaksi->id_meja;
-        $find_meja = Meja::find($select_meja);
-        $status_meja = $find_meja->status_meja;
+
+        // // Goal = Get status meja
+        // $select_transaksi = Transaksi::find($id_transaksi);
+        // // Find meja
+        // // Find column id_meja on Transaksi table
+        // $select_meja = $select_transaksi->id_meja;
+        // // Get current value of id_meja and search on Meja table
+        // $find_meja = Meja::where('id_meja', $select_meja);
+        // // Find column status_meja on Meja table based on id_meja
+        // $status_meja = $find_meja->status_meja;
 
         if ($update_transaksi) {
             $update_transaksi->update([
                 'status' => $request->status,
             ]);
-            if ($request->status == 'lunas') {
-                $status_meja->update([
-                    'status_meja' => 'kosong'
-                ]);
-            } else {
-                $status_meja->update([
-                    'status_meja' => 'terisi'
-                ]);
-            }
+            // if ($request->status == 'lunas') {
+            //     $status_meja->update([
+            //         'status_meja' => 'kosong'
+            //     ]);
+            // } else {
+            //     $status_meja->update([
+            //         'status_meja' => 'terisi'
+            //     ]);
+            // }
 
             return response()->json([
                 'success' => true,

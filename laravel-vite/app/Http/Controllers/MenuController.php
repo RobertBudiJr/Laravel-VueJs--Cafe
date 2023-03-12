@@ -13,10 +13,6 @@ class MenuController extends Controller
     //  *
     //  * @return void
     //  */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
 
     //get data
     public function index(){

@@ -17,10 +17,6 @@ class MejaController extends Controller
     //  *
     //  * @return void
     //  */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
 
     //get data
     public function index(){
@@ -73,7 +69,6 @@ class MejaController extends Controller
     public function update(Request $request, $id_meja)
     {
         $validator = Validator::make($request->all(), [
-            'nomor_meja' => 'required',
             'status_meja' => 'required',
         ]);
 
@@ -85,7 +80,6 @@ class MejaController extends Controller
 
         if ($update_meja) {
             $update_meja->update([
-                'nomor_meja' => $request->nomor_meja,
                 'status_meja' => $request->status_meja,
             ]);
             return response()->json([

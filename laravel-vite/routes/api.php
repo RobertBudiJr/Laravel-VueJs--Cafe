@@ -27,37 +27,60 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['jwt.verify']], function(){
     Route::group(['middleware' => ['api.manajer']], function(){
-        // CRUD Transaksi
-        Route::resource('/transaksi', TransaksiController::class);
-        // CRUD Detail Transaksi
-        Route::resource('/detail_transaksi', DetailTransaksiController::class);
+        // Watch Menu
+        Route::get('manajer/menu', [MenuController::class, 'index']);
+        Route::get('manajer/menu/{id}', [MenuController::class, 'show']);
+
+        // Watch Transaksi
+        Route::get('manajer/transaksi', [TransaksiController::class, 'index']);
+        Route::get('manajer/transaksi/{id}', [TransaksiController::class, 'show']);
     });
 
     Route::group(['middleware' => ['api.kasir']], function(){
-        // CRUD Menu
-        Route::resource('/menu', MenuController::class);
-        // CRUD Meja
-        Route::resource('/meja', MejaController::class);
+        // Watch Menu
+        Route::get('kasir/menu', [MenuController::class, 'index']);
+        Route::get('kasir/menu/{id}', [MenuController::class, 'show']);
+        
+        // Watch Meja
+        Route::get('kasir/meja', [MejaController::class, 'index']);
+        Route::get('kasir/meja/{id}', [MejaController::class, 'show']);
+        Route::put('kasir/meja/{id}', [MejaController::class, 'update']);
+        
         // Filter meja
-        Route::post('/mejafilter', [MejaController::class, 'mejafilter']);
-        // Transaksi
-        Route::get('/transaksi', [TransaksiController::class, 'index']);
-        Route::get('/transaksi/{id}', [TransaksiController::class, 'show']);
-    
-        Route::post('/transaksi', [TransaksiController::class, 'create']);
-        Route::put('/updatetransaksi/{id}', [TransaksiController::class, 'update']);
+        Route::post('kasir/mejafilter', [MejaController::class, 'mejafilter']);
+        
+        // CRU Transaksi
+        Route::get('kasir/transaksi', [TransaksiController::class, 'index']);
+        Route::get('kasir/transaksi/{id}', [TransaksiController::class, 'show']);
+        Route::post('kasir/transaksi', [TransaksiController::class, 'create']);
+        Route::put('kasir/transaksi/{id}', [TransaksiController::class, 'update']);
     });
 
     Route::group(['middleware' => ['api.admin']], function(){
-        // CRUD user
-        Route::post('/register', [UserController::class, 'register']);
-        Route::put('/user/{id}', [UserController::class, 'update']);
-        Route::delete('/user/{id}', [UserController::class, 'destroy']);
-        Route::get('/user', [UserController::class, 'show']);
+        // CRUD User
+        Route::post('admin/register', [UserController::class, 'register']);
+        Route::put('admin/user/{id}', [UserController::class, 'update']);
+        Route::delete('admin/user/{id}', [UserController::class, 'destroy']);
+        Route::get('admin/user', [UserController::class, 'index']);
+        Route::get('admin/user/{id}', [UserController::class, 'show']);
+
+        // CRUD Meja
+        Route::get('admin/meja', [MejaController::class, 'index']);
+        Route::get('admin/meja/{id}', [MejaController::class, 'show']);
+        Route::post('admin/meja', [MejaController::class, 'store']);
+        Route::put('admin/meja/{id}', [MejaController::class, 'update']);
+        Route::delete('admin/meja/{id}', [MejaController::class, 'destroy']);
+        
+        // CRUD Menu
+        Route::get('admin/menu', [MenuController::class, 'index']);
+        Route::get('admin/menu/{id}', [MenuController::class, 'show']);
+        Route::post('admin/menu', [MenuController::class, 'store']);
+        Route::put('admin/menu/{id}', [MenuController::class, 'update']);
+        Route::delete('admin/menu/{id}', [MenuController::class, 'destroy']);
     });
     
 });
 
 Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
+// Route::post('/logout', [UserController::class, 'logout']);
 

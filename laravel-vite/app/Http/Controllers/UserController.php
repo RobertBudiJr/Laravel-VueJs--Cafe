@@ -99,44 +99,22 @@ class UserController extends Controller
         return response()->json(compact('user'));
     }
     
-    public function show(){
+    public function index(){
         return response()->json([
             'data' => User::all()
         ]);
     }
 
-    // public function update(Request $request,$id){
-        
-    //     $request->validate([
-    //         'nama_user' => 'required|string|max:255',
-    //         'role' => 'required',
-    //         'username' => 'required|string|max:255',
-    //         'email' => 'required|string|max:255',
-    //         'password' => 'required',
-    //     ]);
+    public function show($id_user){
+        $user_dt = User::findOrFail($id_user);
 
-       
+        return response()->json([
+            'success' => true,
+            'message' => 'user list',
+            'data' => $user_dt
+        ]);
+    }
 
-    //     User::where('id', $id)->update([
-    //         'nama_user' => $request->nama_user,
-    //         'role' => $request->role,
-    //         'username' => $request->username,
-    //         'email' => $request->email,
-    //         'password' =>Hash::make( $request->password),
-    //     ]);
-
-    //     $data = User::find($id);
-
-    //     return response([
-    //         "data" => $data
-    //     ]);
-    // }
-
-    // public function delete($id){
-    //     User::where('id',$id)->delete();
-
-    //     return response(["Data telah terhapus"]);
-    // }
     //update data
     public function update(Request $request, $id_user)
     {
