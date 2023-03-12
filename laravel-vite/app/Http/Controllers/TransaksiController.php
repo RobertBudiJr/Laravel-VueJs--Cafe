@@ -68,6 +68,7 @@ class TransaksiController extends Controller
         if (!$meja_check) return response()->json([
             'message' => 'Meja tidak tersedia'
         ]);
+
         // Check meja occupied
         $meja_status = Meja::find($request->id_meja);
         $meja_status = $meja_status->status_meja;
@@ -79,8 +80,16 @@ class TransaksiController extends Controller
         // Check user available
         $user_check = User::where('id_user', $request->id_user)->first();
         if (!$user_check) return response()->json([
-            'success' => false,
             'message' => 'User tidak tersedia'
+        ]);
+
+        // Check if User is Kasir
+        $role = User::find($request->id_user);
+        $role = $role->role;
+        $check_role = ($role == 'kasir');
+
+        if (!$check_role) return response()->json([
+            'message' => 'User terpilih bukan kasir'
         ]);
 
         // Query to Transaksis table
