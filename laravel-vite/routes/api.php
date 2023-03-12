@@ -54,6 +54,9 @@ Route::group(['middleware' => ['jwt.verify']], function(){
         Route::get('kasir/transaksi/{id}', [TransaksiController::class, 'show']);
         Route::post('kasir/transaksi', [TransaksiController::class, 'create']);
         Route::put('kasir/transaksi/{id}', [TransaksiController::class, 'update']);
+
+        // Filter transaksi
+        Route::post('kasir/statusfilter', [TransaksiController::class, 'statusfilter']);
     });
 
     Route::group(['middleware' => ['api.admin']], function(){

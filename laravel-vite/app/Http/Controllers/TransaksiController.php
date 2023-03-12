@@ -186,4 +186,20 @@ class TransaksiController extends Controller
             'message' => 'failed to update transaksi'
         ]);
     }
+
+     // filter data which paid off or not
+     public function statusfilter(Request $request) {
+        $status = $request->status;
+
+        $results= [];
+
+        $results = DB::table('transaksis')
+        ->select('id_transaksi','tgl_transaksi', 'id_user', 'id_meja', 'nama_pelanggan', 'status')
+        ->where("status", "$status")
+        ->get();
+
+        return response()->json(([
+            'data' => $results
+        ]));
+    } 
 }
