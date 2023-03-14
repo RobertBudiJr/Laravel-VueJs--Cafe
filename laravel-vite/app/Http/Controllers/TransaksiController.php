@@ -49,33 +49,19 @@ class TransaksiController extends Controller
     {
         // Validation
         $validator = Validator::make($request->all(),[
-            // 'tgl_transaksi' => 'required',
             'id_user' => 'required|integer',
             'id_meja' => 'required|integer',
             'nama_pelanggan' => 'required|string',
             'status' => 'required|in:belum_bayar,lunas',
-            'id_menu' => 'required|integer',
-            'jumlah' => 'required|integer',
-            'total_harga' => 'required|integer',
-        ]);
+            'items' => 'required|array',
+            'items.*.id_menu' => 'required|integer',
+            'items.*.total_harga' => 'required|integer',
+            'items.*.jumlah' => 'required|integer',
+        ])->safe()->all();
 
-        if ($validator->fails()){
-            return response()->json($validator->errors(),400);
-        }
-
-        $meja_check = Meja::where('id_meja', $request->id_meja)->first();
-        // Check meja available
-        if (!$meja_check) return response()->json([
-            'message' => 'Meja tidak tersedia'
-        ]);
-
-        // Check meja occupied
-        $meja_status = Meja::find($request->id_meja);
-        $meja_status = $meja_status->status_meja;
-
-        if ($meja_status == 'terisi') return response()->json([
-            'message' => 'Meja penuh'
-        ]);
+        // if ($validator->fails()){
+        //     return response()->json($validator->errors());
+        // }
 
         // Check user available
         $user_check = User::where('id_user', $request->id_user)->first();
@@ -91,10 +77,24 @@ class TransaksiController extends Controller
         if (!$check_role) return response()->json([
             'message' => 'User terpilih bukan kasir'
         ]);
+        
+        $meja_check = Meja::where('id_meja', $request->id_meja)->first();
+        // Check meja available
+        if (!$meja_check) return response()->json([
+            'message' => 'Meja tidak tersedia'
+        ]);
+
+        // Check meja occupied
+        $meja_status = Meja::find($request->id_meja);
+        $meja_status = $meja_status->status_meja;
+
+        if ($meja_status == 'terisi') return response()->json([
+            'message' => 'Meja penuh'
+        ]);
+
 
         // Query to Transaksis table
         $transaksi_input = Transaksi::create([
-            // 'tgl_transaksi' => $request->get('tgl_transaksi'),
             'id_user' => $request->get('id_user'),
             'status_meja' => $request->get('status_meja'),
             'id_meja' => $request->get('id_meja'),
@@ -107,12 +107,15 @@ class TransaksiController extends Controller
         $id = $transaksi_id->id_transaksi;
 
         // Query to Detail Transaksi table
-        $detail_input = DetailTransaksi::create([
-            'id_transaksi' => $id,
-            'id_menu' => $request->get('id_menu'),
-            'jumlah' => $request->get('jumlah'),
-            'total_harga' => $request->get('total_harga'),            
-        ]);
+        // Loop by Item array count
+        foreach ($validator['items'] as $item) {
+            $detail_input = DetailTransaksi::create([
+                'id_transaksi' => $id,
+                'id_menu' => $item['id_menu'],
+                'jumlah' => $item['jumlah'],
+                'total_harga' => $item['total_harga'],            
+            ]);
+        }
 
         // Query to Update Status Meja to Occupied
         $currentIdMeja = $request->get('id_meja');
@@ -160,29 +163,10 @@ class TransaksiController extends Controller
 
         $update_transaksi = Transaksi::where('id_transaksi', $id_transaksi);
 
-        // // Goal = Get status meja
-        // $select_transaksi = Transaksi::find($id_transaksi);
-        // // Find meja
-        // // Find column id_meja on Transaksi table
-        // $select_meja = $select_transaksi->id_meja;
-        // // Get current value of id_meja and search on Meja table
-        // $find_meja = Meja::where('id_meja', $select_meja);
-        // // Find column status_meja on Meja table based on id_meja
-        // $status_meja = $find_meja->status_meja;
-
         if ($update_transaksi) {
             $update_transaksi->update([
                 'status' => $request->status,
             ]);
-            // if ($request->status == 'lunas') {
-            //     $status_meja->update([
-            //         'status_meja' => 'kosong'
-            //     ]);
-            // } else {
-            //     $status_meja->update([
-            //         'status_meja' => 'terisi'
-            //     ]);
-            // }
 
             return response()->json([
                 'success' => true,

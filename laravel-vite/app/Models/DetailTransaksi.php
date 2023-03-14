@@ -19,14 +19,4 @@ class DetailTransaksi extends Model
     protected $fillable = [
         'id_transaksi', 'id_menu', 'jumlah', 'total_harga'
     ];
-
-    // public function transaksi()
-    // {
-    //     return $this->belongsTo(Transaksi::class);
-    // }
-
-    // public function menu()
-    // {
-    //     return $this->belongsTo(Menu::class);
-    // }
 }

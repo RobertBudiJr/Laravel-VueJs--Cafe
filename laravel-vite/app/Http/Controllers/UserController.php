@@ -16,12 +16,7 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
-        // I changed variable definition from $request->only('email', 'password') to $request->only('username', 'password')
         $credentials = $request->only('email', 'password');
-
-        // variable below have the same results
-        // $credentials = ['username' => $request->input('username'), 'password' => $request->input('password')];
-
 
         try {
             if(! $token = JWTAuth::attempt($credentials)) {
@@ -33,9 +28,15 @@ class UserController extends Controller
             return response()->json(['error' => 'could not create token'], 500);
         }
 
-        // return response()->json(compact('token'));
         return  $this->createNewToken($token);
         
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     public function userProfile(){
@@ -43,7 +44,6 @@ class UserController extends Controller
     }
 
     protected function createNewToken($token){
-        // dd(auth()->user()->role);
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

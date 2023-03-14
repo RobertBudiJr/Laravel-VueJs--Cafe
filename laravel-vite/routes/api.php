@@ -85,5 +85,5 @@ Route::group(['middleware' => ['jwt.verify']], function(){
 });
 
 Route::post('/login', [UserController::class, 'login']);
-// Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/logout', [UserController::class, 'logout']);
 

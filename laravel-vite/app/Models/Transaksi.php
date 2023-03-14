@@ -19,19 +19,4 @@ class Transaksi extends Model
     protected $fillable = [
         'tgl_transaksi', 'id_user', 'id_meja', 'nama_pelanggan', 'status'
     ];
-
-    // public function detail_transaksi()
-    // {
-    //     return $this->hasMany(DetailTransaksi::class, 'id_transaksi');
-    // }
-
-    // public function user()
-    // {
-    //     return $this->hasOne(User::class);
-    // }
-
-    // public function meja()
-    // {
-    //     return $this->hasOne(Meja::class);
-    // }
 }
